@@ -1,0 +1,10 @@
+
+use("sample_training")
+
+//  1 -> ASC (menor a mayor)   
+// -1 -> DESC (mayor a menor)
+db.zips
+    .find({ pop: { $gte: 100}}) // mayor o igual a 100
+    .sort({ pop: 1})    // ordenar de menor a mayor 
+    .limit(2)   // para traer solo los 2 más menores
+

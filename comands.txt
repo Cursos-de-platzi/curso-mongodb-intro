@@ -1,0 +1,207 @@
+
+## usar una BD si existe, si no, la crea
+use("platzi_store")
+
+## si no existe la collection products la crea. dentro de products inserta un document 
+db.products.insertOne({
+    name: "Product 1",
+    price: 1000
+})
+
+## mostrar todos los documents de la collection
+db.products.find()
+
+## filtrar por estado, y contar el resultado
+db.zips.find({ state: 'NY'}).count()
+
+## drop toma la collection y la vacia, borra todos los documentos de la coleccion
+db.products.drop()
+
+## crear varios productos 
+
+
+1 -> forma normal
+db.products.insertMany([
+    {
+        _id: 1,
+        name: "Product 1",
+        price: 100
+    },
+    {
+        _id: 2,
+        name: "Product 2",
+        price: 20
+    },
+    {
+        _id: 3,
+        name: "Product 3",
+        price: 120
+    },
+])
+2 -> supongase que hay ids duplicados, el daria error pero de igual forma inserta los dos primeros
+db.products.insertMany([
+    {
+        _id: 1,
+        name: "Product 1",
+        price: 100
+    },
+    {
+        _id: 2,
+        name: "Product 2",
+        price: 20
+    },
+    {
+        _id: 1,
+        name: "Product 3",
+        price: 120
+    },
+])
+3 -> supongase que hay ids duplicados, el daria error y solo insertaría los documentos hasta antes del error
+db.products.insertMany([
+    {
+        _id: 1,
+        name: "Product 1",
+        price: 100
+    },
+    {
+        _id: 2,
+        name: "Product 2",
+        price: 20
+    },
+    {
+        _id: 1,
+        name: "Product 3",
+        price: 120
+    },
+    {
+        _id: 3,
+        name: "Product 3",
+        price: 120
+    },
+])
+4 -> con esta instruccion le decimos, salteme los errores y creeme los que estén bien
+db.products.insertMany([
+    {
+        _id: 1,
+        name: "Product 1",
+        price: 100
+    },
+    {
+        _id: 2,
+        name: "Product 2",
+        price: 20
+    },
+    {
+        _id: 1,
+        name: "Product 3",
+        price: 120
+    },
+    {
+        _id: 3,
+        name: "Product 3",
+        price: 120
+    },
+], {
+    ordered: false
+})
+
+## actualizar un documento con el operdaor set 
+db.products.updateOne(
+    // query
+    {_id: 2},
+    // change => operators. Tambien se le pueden agregar nuevos campos
+    {
+        $set: {
+            name: 'Change name',
+            price: 3000,
+            tags: ['A', 'B', 'C']
+        }
+    }
+)
+
+## actualizar un documento con el operador inc, que es usado en valores numericos -> base+inc
+db.products.updateOne(
+    // query
+    {_id: 2},
+    // change => operators. Este normalmente se basa para valores numericos 
+    {
+        $inc: {
+            price: 100,
+        }
+    }
+)
+
+## si queremos usar el ObjectId para actualizar
+db.products.updateOne(
+    // query
+    // asi no funciona {_id: "65c83087884fffce6af56fa4"},
+    // así funciona 
+    {_id: ObjectId("65c83087884fffce6af56fa4")},
+    // change => operators. Este normalmente se basa para valores numericos 
+    {
+        $inc: {
+            price: 100,
+        }
+    }
+)
+
+## actualizando un elemento, quiero agregar un elemento al array
+db.inventory.updateOne({_id: 4},{
+    $push: {
+        tags: "headphone"
+    }
+})
+
+## se trae todos los docuementos {}, quiero quitar un elemento de un array
+db.inventory.updateMany({},{
+    $pull: {
+        tags: "book"
+    }
+})
+
+## remove others elements from array
+db.inventory.updateMany({},{
+    $pull: {
+        tags: {
+            $in: ["appliance", "school"]
+        }
+    }
+})
+
+## insertar un documento 
+db.iot.insertOne({
+    sensor: "A001",
+    date: "2022-01-03",
+    readings: [1212]
+})
+
+## actualizar un documento 
+db.iot.updateOne({
+    sensor: "A001",
+    date: "2022-01-03",
+}, {
+    $push: {
+        readings: 2323
+    }
+})
+
+## funciona como si fuera un insert-update , si el documento no existe lo crea, si existe lo actualiza
+db.iot.updateOne({
+    sensor: "A001",
+    date: "2022-01-04",
+}, {
+    $push: {
+        readings: 124124
+    }
+},{
+    upsert: true
+})
+
+## eleminar con ObjectId
+db.products.deleteOne({_id: ObjectId('id')})
+## eliminar por id
+db.products.deleteOne({_id: 1})
+## eliminar usando una query, borra todos los documentos que su price == 100
+db.products.deleteMany({
+    price: 100
+})

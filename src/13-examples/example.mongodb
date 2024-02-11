@@ -1,0 +1,13 @@
+use("platzi_store")
+
+db.iot.updateMany(
+    //query
+    { sensor: "A001"},
+    // update
+    {
+        // quien cumpla con la condicion va ser eliminado
+        $pull: {
+            readings: { $gte: 3}
+        }
+    }
+)

@@ -1,0 +1,31 @@
+
+use("platzi_store")
+
+// $in -> para values & arrays
+
+// trae todos los elementos que tienen o 20 o 25
+// db.inventory.find({ qty: {$in: [20, 25]} } )
+// dentro del array que esté o books o electronics
+// db.inventory.find({ tags: {$in: ["electronics", "book"]} } )
+
+// $nin , values & arrays, no está el 20 o no está el 25
+// db.inventory.find({ qty: {$nin: [20, 25]} } )
+// db.inventory.find({ tags: {$nin: ["electronics", "book"]} } )
+
+// arrays 
+//$all  es como un and sin importar el orden
+// db.inventory.find({tags: {$all: ["book", "school"]} })
+
+//$size  el tamaño del array sea de dos elementos
+// db.inventory.find({tags: {$size: 2} })
+
+// $elemMatch
+// db.survey.find({ results: { $elemMatch: {product: "xyz"}}})
+db.survey.find({
+    results: {
+        $elemMatch: {
+            product: "xyz",
+            score: {$gte: 7}
+        }
+    }
+})

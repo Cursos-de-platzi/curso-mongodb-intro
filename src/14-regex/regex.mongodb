@@ -1,0 +1,8 @@
+use("platzi_store")
+
+// db.inventory.find({ "item.description": { $regex: /line/ }})
+// db.inventory.find({ "item.description": { $regex: /LINE/i }})   // no importa si es mayuscula
+// db.inventory.find({ "item.description": { $regex: /line$/i }})   // termine con line
+// db.inventory.find({ "item.description": { $regex: /^single/i }})   // inicie con single
+db.inventory.find({ "item.description": { $regex: /^s/im }})   // inicie con s sin importar saltos de linea
+

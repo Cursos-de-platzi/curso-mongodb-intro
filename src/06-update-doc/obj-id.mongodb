@@ -1,0 +1,14 @@
+use("platzi_store")
+
+db.products.updateOne(
+    // query
+    // asi no funciona {_id: "65c83087884fffce6af56fa4"},
+    // así funciona 
+    {_id: ObjectId("65c83087884fffce6af56fa4")},
+    // change => operators. Este normalmente se basa para valores numericos 
+    {
+        $inc: {
+            price: 100,
+        }
+    }
+)

@@ -1,0 +1,19 @@
+use("platzi_store")
+
+// db.monthlyBudget.find({ spent: {$gte: 100}})
+
+// es lo mismo estos dos
+
+// db.monthlyBudget.find({ 
+//     $expr: {
+//         $gte: ["$spent", 100]
+//     }
+// })
+
+// pero es más potente para hacer otras cosas 
+// dime los documentos donde me dice que la columna spent >= columna budget
+db.monthlyBudget.find({ 
+    $expr: {
+        $gte: ["$spent", "$budget"]
+    }
+})
